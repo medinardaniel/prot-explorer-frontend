@@ -1,0 +1,89 @@
+/* styles/page.css */
+.page-container {
+    padding: 0 2rem;
+  }
+  
+  .page-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .page-title {
+    margin: 0;
+    line-height: 1.15;
+    font-size: 32pt;
+    text-align: center;
+  }
+  
+  .page-subtitle {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 12pt;
+    width: 60%;
+  }
+  
+  .page-input {
+    margin-top: 2rem;
+    font-size: 12pt; /* or 1rem if you want to keep sizes consistent */
+    padding: 0.5rem;
+    border: 1px solid #cccccc; /* Example: gray border */
+    outline: none; /* Optional: Removes the focus outline */
+    border-radius: 12px;
+    width: 60%;
+  }
+  
+/* Add to styles/page.css */
+.input-container {
+    display: flex;
+    align-items: center; /* This ensures vertical alignment */
+    width: 60%;
+  }
+  
+.page-input {
+    margin-top: 2rem;
+    font-size: 12pt;
+    padding: 0.5rem;
+    border: 1px solid #cccccc;
+    flex-grow: 1; /* Allows the input to grow and fill the space */
+    margin-right: 0.5rem; /* Adds a small space between the input and the button */
+    width: 60%;
+  }
+  
+  .explore-button {
+    padding: 0.5rem 1rem;
+    font-size: 12pt;
+    margin-top: 2rem;
+    cursor: pointer;
+    border: 1px solid #cccccc;
+    background-color: #00c500;
+    color: white;
+    border-radius: 12pt;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+  }
+  
+/* New hover styles */
+.explore-button:hover {
+    background-color: #000000; /* Darker shade on hover */
+  }
+  
+  /* New focus styles */
+  .explore-button:focus {
+    outline: 2px solid #000000; /* Outline to show focus, can be adjusted for visibility */
+    outline-offset: 2px; /* Optional: adds space between the button border and the outline */
+  }
+
+  .number-input {
+    margin-top: 2rem;
+    font-size: 12pt;
+    padding: 0.5rem;
+    margin-right: 0.5rem; /* To add some space between this input and the "Explore" button */
+    border: 1px solid #cccccc;
+    width: 45px; /* Adjust the width as needed */
+    border-radius: 12px;
+    text-align: center;
+  }
+  
+  

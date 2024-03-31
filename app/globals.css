@@ -16,14 +16,16 @@
   }
 }
 
+html {
+  min-height: 100vh; /* ensures the gradient covers the full height of the viewport */
+  background: white;
+}
+
+
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  min-height: 100vh; /* ensures the gradient covers the full height of the viewport */
+  background: inherit; /* this makes sure the body uses the same background as html */
+  margin: 0; /* removing default margin */
 }
 
 @layer utilities {
