@@ -2,33 +2,50 @@
 import { useState, useEffect } from 'react'; // Corrected import
 import Head from 'next/head';
 import './styles/page.css';
-import ProtCard from './protcard'; // Make sure the path matches your file structure
+import ProtCardCarousel from './protcardCarrousel';
+import { Protein } from './types';
+import funcEmbeddings from './data/func_embeddings_reduced.json';
+import seqEmbeddings from './data/seq_embeddings_reduced.json';
+import dynamic from 'next/dynamic';
 
-interface Protein {
-  name: string;
-  sequence: string;
-  function_details: string;
-  binding_sites: string;
-  link: string;
-  // Include any other properties that match your backend response
-}
+// Dynamically import UmapVisualization with SSR turned off
+const UmapVisualization = dynamic(() => import('./umap'), {
+  ssr: false  // Disable server-side rendering for this component
+});
 
 const Page = () => {
   const [inputValue, setInputValue] = useState('');
-  const [numberValue, setNumberValue] = useState(''); // Consider starting as a string for consistency with input handling
+  const [numberValue, setNumberValue] = useState('');
   const [proteins, setProteins] = useState<Protein[]>([]);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [exploreUniqueEntryIds, setExploreUniqueEntryIds] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Directly store the value without converting to number here
-    setNumberValue(value);
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = event.target;
+    setInputValue(textarea.value);
+  
+    // Reset the height to 'auto' to calculate the scrollHeight correctly
+    textarea.style.height = 'auto';
+  
+    // Only adjust the height if the scrollHeight is greater than the clientHeight
+    if (textarea.scrollHeight > textarea.clientHeight) {
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
   };
   
+
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberValue(e.target.value);
+  };
+
+  const handleNumberBlur = () => {
+    const numValue = parseInt(numberValue, 10);
+    if (isNaN(numValue) || numValue < 10 || numValue > 50) {
+      alert('Out of range input. Please enter a number between 10 and 50.');
+      setNumberValue('');
+    }
+  };
 
   const handleExploreClick = async () => {
     if (inputValue.trim() === '') {
@@ -36,36 +53,35 @@ const Page = () => {
       return;
     }
   
-    // Assume numberValue is 10 if empty, and validate the range if not empty
-    const numberToSend = !numberValue ? 10 : Math.min(Math.max(parseInt(numberValue, 10), 1), 50);
+    const numberToSend = parseInt(numberValue, 10);
+    if (isNaN(numberToSend) || numberToSend < 10 || numberToSend > 50) {
+      alert('Out of range input. Please enter a valid number between 10 and 50.');
+      return;
+    }
   
+    setIsLoading(true); // Start loading
     try {
-      const response = await fetch('/api/explore', {
+      const response = await fetch('http://127.0.0.1:5000/process_input', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          protein: inputValue,
-          number: numberToSend, // Use the computed value here
+          function: inputValue,
+          number: numberToSend,
+          exploreUniqueEntryIds: exploreUniqueEntryIds,
         }),
       });
   
       const data = await response.json();
-      setProteins(data.proteins);
-      setCurrentCardIndex(0);
+      setTags(data.tags);
+      setProteins(data.similar_proteins);
     } catch (error) {
       console.error('There was an error sending the protein data:', error);
+    } finally {
+      setIsLoading(false); // Stop loading regardless of outcome
     }
   };  
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % proteins.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [proteins]);
 
   return (
     <div className="page-container">
@@ -74,45 +90,88 @@ const Page = () => {
         <meta name="description" content="Explore proteins and their structures" />
       </Head>
       <main className="page-main">
-        <h1 className="page-title">
-          Protein Explorer
-        </h1>
-        <p className="page-subtitle">
-          Welcome to Protein Explorer. Enter the name or sequence of the protein you want to explore and how many similar proteins you would like to see below.
-        </p>
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="Enter protein name or sequence"
-            className="page-input"
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text" // Change to text to remove the native number input functionality
-            placeholder="10"
-            inputMode="numeric" // This will still bring up the numeric keypad on mobile devices
-            pattern="[0-9]*" // This pattern restricts the input to numbers only
-            className="number-input"
-            value={numberValue}
-            onChange={handleNumberChange}
-            min="1"
-            max="50"
-          />
-          <button className="explore-button" onClick={handleExploreClick}>
-            Explore
-          </button>
-        </div>
-        <div className="prot-cards-container">
-          {proteins.length > 0 && (
-            <ProtCard
-              name={proteins[currentCardIndex].name}
-              sequence={proteins[currentCardIndex].sequence}
-              function_details={proteins[currentCardIndex].function_details}
-              binding_sites={proteins[currentCardIndex].binding_sites}
-              link={proteins[currentCardIndex].link}
+        <div className="explore-section">
+          <h1 className="page-title">Protein Explorer</h1>
+          <p className="page-subtitle">
+            Welcome to Protein Explorer. Enter the function description of the protein you want to explore below.
+          </p>
+
+          <div className="input-container">
+            <textarea
+              placeholder="Enter protein function description"
+              className="page-input"
+              value={inputValue}
+              onChange={handleInputChange}
             />
+            <input
+              type="number"
+              placeholder="10"
+              className="number-input"
+              value={numberValue}
+              onChange={handleNumberChange}
+              onBlur={handleNumberBlur}
+              min="10"
+              max="50"
+            />
+            <button
+              className="explore-button"
+              onClick={handleExploreClick}
+              disabled={isLoading} // The button will be disabled when isLoading is true
+            >
+              Explore
+            </button>
+          </div>
+
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              id="explore-same-entry-ids-checkbox"
+              className="explore-same-entry-ids-checkbox"
+              checked={exploreUniqueEntryIds}
+              onChange={() => setExploreUniqueEntryIds(!exploreUniqueEntryIds)}
+            />
+            <label htmlFor="explore-same-entry-ids-checkbox">Explore unique entry IDs</label>
+            <div className="info-icon" tabIndex={0}>
+              <img src="info-2.svg" alt="Info" width="18" height="18" />
+              <span className="tooltip-text">Select to receive a list of distinct protein structures. Deselect to include multiple components or variations of the same protein.</span>
+            </div>
+          </div>
+          {isLoading && (
+            <div className="spinner-container">
+              <div className="spinner"></div>
+            </div>
           )}
+          {tags.length > 0 && (
+          <div className="section-subtitle">
+            <p className="section-subtitle-text">Predicted MONDO Annotations</p>
+          </div>
+          )}
+          <div className="tags-container">
+            {tags.map((tag, index) => (
+              <span key={index} className="tag">{tag}</span>
+            ))}
+          </div>
+          {proteins.length > 0 && (
+            <div className="section-subtitle">
+              <p className="section-subtitle-text">Similar Proteins</p>
+            </div>
+          )}
+          <div className="carousel">
+            {proteins.length > 0 && (
+              <ProtCardCarousel proteins={proteins} />
+            )}
+          </div>
+        </div>
+        <div className="embeddings-section">
+        <div className="section-subtitle">
+              <p className="section-subtitle-text">Protein Embeddings</p>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <UmapVisualization
+            embedding1={funcEmbeddings}
+            embedding2={seqEmbeddings}
+          />
+        </div>
         </div>
       </main>
     </div>

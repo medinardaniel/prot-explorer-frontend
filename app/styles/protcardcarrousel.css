@@ -1,0 +1,84 @@
+/* protcardCarousel.css */
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    overflow: hidden;  /* Ensures the scroll area is neatly contained */
+    position: relative;
+}
+/* Add fading effect on the left side */
+.carousel-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100px; /* width of the fade effect */
+    background: linear-gradient(to right, #fff, transparent);
+    pointer-events: none; /* Allow click events to pass through to elements underneath */
+    z-index: 2; /* Ensure the fade is above the scrolled content */
+  }
+  
+  /* Add fading effect on the right side */
+  .carousel-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100px; /* width of the fade effect */
+    background: linear-gradient(to left, #fff, transparent);
+    pointer-events: none; /* Allow click events to pass through to elements underneath */
+    z-index: 2; /* Ensure the fade is above the scrolled content */
+  }
+  
+.carousel-slide {
+    display: flex;
+    flex-wrap: nowrap;  /* Prevent wrapping of items */
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    scrollbar-width: none;  /* Hide scrollbar for cleaner look */
+    justify-content: flex-start;
+    width: 90%; /* Ensure this is full width to handle responsiveness */
+    transition: transform 0.3s ease-in-out;
+    -ms-overflow-style: none;  /* IE and Edge */
+    height: 45vh;
+  }
+
+
+
+  .carousel-slide::-webkit-scrollbar {
+    display: none;  /* Hide scrollbar on Chrome, Safari and Opera */
+}
+
+  .prot-card-container {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    width: 400px;
+    min-height: 300px;
+    border-radius: 8px;
+    border-color: rgb(136, 136, 136);
+    border-width: 2px;
+    margin: 8px;
+    background-color: rgb(236, 223, 189);
+    position: relative;
+  }
+
+  .prot-card-number {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    color: #333; /* Change to match your design */
+    padding: 5px;
+    width: 20px; /* Adjust as needed */
+    height: 20px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem; /* Adjust as needed */
+    z-index: 1;
+    font-family: 'Open Sans', sans-serif;
+}

@@ -1,23 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Patua+One&display=swap');
+
+/* protcard.css */
 .prot-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    margin: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #fff;
-  }
-  
-  .prot-card h3 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  .prot-card p {
-    font-size: 1rem;
-    color: #666;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(236, 223, 189);
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.prot-card.has-overflow::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(236, 223, 189, 0), rgba(236, 223, 189, 1));
+  pointer-events: none;
+}
+
+.prot-card.has-overflow::after {
+  background: linear-gradient(to bottom, transparent, #ece9bd 90%);
+}
+
+.prot-title {
+  font: 100 18pt 'Patua One', sans-serif;
+  font-weight: 10;
+  font-size: 11pt;
+  color: #333;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.prot-title a {
+  color: #000;
+  text-decoration: none;
+}
+
+.prot-title a:hover {
+  color: #888;
+  text-decoration: underline;
+}
+
+.prot-contents {
+  overflow-y: auto;
+  width: 100%;
+  flex-grow: 1; /* Ensures it can grow to fill space */
+}
+
+.prot-func {
+  font: 400 12pt 'Open Sans', sans-serif;
+  font-size: 9pt;
+  color: #404040;
+}
+
+.prot-mondo-title {
+  font: 400 10pt 'Open Sans', sans-serif;
+  font-size: 9pt;
+  color: #404040;
+  margin-top: 10px;
+  align-self: flex-start;
+  font-weight: bold;
+}
+
+.prot-annotations {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  margin-top: 2px;
+  align-self: flex-start;
+}
+
+.annotation-tag {
+  display: inline-block;
+  background-color: #e0e0e000;
+  color: #ce2f2f;
+  border: solid 1px #ce2f2f;
+  border-radius: 10px;
+  padding: 2px 5px;
+  font-size: 10px;
+  margin: 2px;
+}
   
