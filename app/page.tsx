@@ -6,6 +6,7 @@ import ProtCardCarousel from './protcardCarrousel';
 import { Protein } from './types';
 import funcEmbeddings from './data/func_embeddings_reduced.json';
 import seqEmbeddings from './data/seq_embeddings_reduced.json';
+import esm2Embeddings from './data/esm2_embeddings_reduced.json';
 import dynamic from 'next/dynamic';
 
 // Dynamically import UmapVisualization with SSR turned off
@@ -163,15 +164,16 @@ const Page = () => {
           </div>
         </div>
         <div className="embeddings-section">
-        <div className="section-subtitle">
-              <p className="section-subtitle-text">Protein Embeddings</p>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <UmapVisualization
-            embedding1={funcEmbeddings}
-            embedding2={seqEmbeddings}
-          />
-        </div>
+          <div className="section-subtitle">
+                <p className="section-subtitle-text">Protein Embeddings</p>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <UmapVisualization
+              protBertEmbeddings={seqEmbeddings}
+              gistEmbeddings={funcEmbeddings}
+              esmEmbeddings={esm2Embeddings}
+            />
+          </div>
         </div>
       </main>
     </div>

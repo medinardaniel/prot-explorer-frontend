@@ -6,33 +6,46 @@ import Plot from 'react-plotly.js';
 type Embedding = Array<[number, number] | number[]>;
 
 interface UmapVisualizationProps {
-  embedding1: Embedding;
-  embedding2: Embedding;
+  protBertEmbeddings: Embedding;
+  gistEmbeddings: Embedding;
+  esmEmbeddings: Embedding;
 }
 
-const UmapVisualization: React.FC<UmapVisualizationProps> = ({ embedding1, embedding2 }) => {
+const UmapVisualization: React.FC<UmapVisualizationProps> = ({
+  protBertEmbeddings,
+  gistEmbeddings,
+  esmEmbeddings
+}) => {
   return (
     <Plot
       data={[
         {
-          x: embedding1.map(point => point[0]), // UMAP 1st dimension
-          y: embedding1.map(point => point[1]), // UMAP 2nd dimension
+          x: protBertEmbeddings.map(point => point[0]), // UMAP 1st dimension
+          y: protBertEmbeddings.map(point => point[1]), // UMAP 2nd dimension
           type: 'scattergl', // Use WebGL rendering for performance improvement
           mode: 'markers',
-          name: 'Function Embeddings',
+          name: 'ProtBert Embeddings',
           marker: { size: 8, opacity: 0.8, line: { width: 0.5, color: 'DarkSlateGrey' } },
         },
         {
-          x: embedding2.map(point => point[0]), // UMAP 1st dimension
-          y: embedding2.map(point => point[1]), // UMAP 2nd dimension
-          type: 'scattergl', // Use WebGL rendering for performance improvement
+          x: gistEmbeddings.map(point => point[0]), // UMAP 1st dimension
+          y: gistEmbeddings.map(point => point[1]), // UMAP 2nd dimension
+          type: 'scattergl',
           mode: 'markers',
-          name: 'Sequence Embeddings',
+          name: 'GIST Embeddings',
+          marker: { size: 8, opacity: 0.8, line: { width: 0.5, color: 'DarkSlateGrey' } },
+        },
+        {
+          x: esmEmbeddings.map(point => point[0]), // UMAP 1st dimension
+          y: esmEmbeddings.map(point => point[1]), // UMAP 2nd dimension
+          type: 'scattergl',
+          mode: 'markers',
+          name: 'ESM Embeddings',
           marker: { size: 8, opacity: 0.8, line: { width: 0.5, color: 'DarkSlateGrey' } },
         }
       ]}
       layout={{
-        title: 'UMAP Projection of Function and Sequence Embeddings',
+        title: 'UMAP Projection of Protein Embeddings',
         xaxis: { title: 'UMAP Dimension 1' },
         yaxis: { title: 'UMAP Dimension 2' },
         legend: { yanchor: "top", y: 0.99, xanchor: "left", x: 0.01 }
