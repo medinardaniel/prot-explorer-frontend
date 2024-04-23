@@ -61,7 +61,7 @@ const Page = () => {
   
     setIsLoading(true); // Start loading
     try {
-      const response = await fetch('http://127.0.0.1:5000/process_input', {
+      const response = await fetch('https://prot-explorer-7431ee3c3611.herokuapp.com/process_input', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
