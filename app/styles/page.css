@@ -1,4 +1,5 @@
 /* styles/page.css */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 .page-container {
@@ -35,7 +36,9 @@
     line-height: 1.15;
     font-size: 32pt;
     text-align: center;
-    font-family: 'Patua One', sans-serif; /* Add the fallback font */
+    font-family: 'Varela Round', sans-serif; /* Add the fallback font */
+    font-weight: 520;
+    font-style: normal;
   }
   
   .page-subtitle {
@@ -212,8 +215,8 @@ label[for="explore-same-entry-ids-checkbox"] {
 
   .section-subtitle-text {
     font-size: 24px;
-    font-family: 'Patua One', sans-serif;
-    font-weight: normal;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 250;
     margin-top: 10px;
     text-align: left;
   }
