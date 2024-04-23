@@ -42,21 +42,21 @@ const Page = () => {
 
   const handleNumberBlur = () => {
     const numValue = parseInt(numberValue, 10);
-    if (isNaN(numValue) || numValue < 10 || numValue > 50) {
-      alert('Out of range input. Please enter a number between 10 and 50.');
+    if (isNaN(numValue) || numValue < 10 || numValue > 30) {
+      alert('Out of range input. Please enter a number between 10 and 30.');
       setNumberValue('');
     }
   };
 
   const handleExploreClick = async () => {
     if (inputValue.trim() === '') {
-      alert('Please enter a protein name or sequence.');
+      alert('Please enter a protein sequence.');
       return;
     }
   
     const numberToSend = parseInt(numberValue, 10);
-    if (isNaN(numberToSend) || numberToSend < 10 || numberToSend > 50) {
-      alert('Out of range input. Please enter a valid number between 10 and 50.');
+    if (isNaN(numberToSend) || numberToSend < 10 || numberToSend > 30) {
+      alert('Out of range input. Please enter a valid number between 10 and 30.');
       return;
     }
   
@@ -94,12 +94,12 @@ const Page = () => {
         <div className="explore-section">
           <h1 className="page-title">Protein Explorer</h1>
           <p className="page-subtitle">
-            Welcome to Protein Explorer. Enter the function description of the protein you want to explore below.
+            Welcome to Protein Explorer. Enter the sequence of the protein you want to explore below.
           </p>
 
           <div className="input-container">
             <textarea
-              placeholder="Enter protein function description"
+              placeholder="Enter protein sequence"
               className="page-input"
               value={inputValue}
               onChange={handleInputChange}
@@ -112,7 +112,7 @@ const Page = () => {
               onChange={handleNumberChange}
               onBlur={handleNumberBlur}
               min="10"
-              max="50"
+              max="30"
             />
             <button
               className="explore-button"
